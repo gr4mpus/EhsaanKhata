@@ -274,12 +274,12 @@ export default function LoginPage() {
         {error && <p className="note bg-bad-soft">{error}</p>}
 
         {mode === "signin" && (
-          <button type="button" className="block text-sm font-medium text-accent" onClick={() => go("forgot")}>
+          <button type="button" className="block text-sm font-bold underline underline-offset-4" onClick={() => go("forgot")}>
             Forgot password?
           </button>
         )}
         {mode === "reset" && (
-          <button type="button" className="text-sm text-accent" disabled={busy} onClick={resendResetCode}>
+          <button type="button" className="text-sm font-bold underline underline-offset-4" disabled={busy} onClick={resendResetCode}>
             Didn&apos;t get it? Resend code
           </button>
         )}
@@ -287,7 +287,7 @@ export default function LoginPage() {
 
       <p className="text-center text-sm text-muted">
         {mode === "signup" ? "Already have an account?" : mode === "signin" ? "New here?" : ""}{" "}
-        <button className="font-medium text-accent" onClick={() => go(mode === "signin" ? "signup" : "signin")}>
+        <button className="font-bold underline decoration-accent decoration-4 underline-offset-4" onClick={() => go(mode === "signin" ? "signup" : "signin")}>
           {mode === "signin" ? "Create an account" : "Back to sign in"}
         </button>
       </p>

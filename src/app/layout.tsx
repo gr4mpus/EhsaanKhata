@@ -25,6 +25,17 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en" className={`${spaceGrotesk.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <main className="mx-auto w-full max-w-xl flex-1 px-4 py-8">{children}</main>
+        <footer className="mx-auto w-full max-w-xl px-4 pb-8 text-center text-sm text-muted">
+          Made with 💛 by{" "}
+          <a
+            href="https://gr4mpus.github.io/portfolio/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="brand font-bold text-foreground underline-offset-4 hover:underline"
+          >
+            gr4mpus
+          </a>
+        </footer>
       </body>
     </html>
   );

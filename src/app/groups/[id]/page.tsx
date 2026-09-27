@@ -209,7 +209,7 @@ function EntryText({
 
 function StatusBadge({ status }: { status: Entry["status"] }) {
   const styles = {
-    pending: "bg-accent-soft text-accent",
+    pending: "bg-accent-soft",
     approved: "bg-ok-soft text-ok",
     rejected: "bg-bad-soft text-bad",
   };
