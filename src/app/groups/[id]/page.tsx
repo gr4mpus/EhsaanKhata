@@ -12,6 +12,7 @@ import { Celebration, type CelebrationEvent } from "@/components/Celebration";
 import { StandingPopup } from "@/components/StandingPopup";
 import { MemberPicker } from "@/components/MemberPicker";
 import { MembersPanel } from "@/components/MembersPanel";
+import { DeleteGroup } from "@/components/DeleteGroup";
 
 export default function GroupPage() {
   const { id } = useParams<{ id: string }>();
@@ -31,6 +32,11 @@ export default function GroupPage() {
       supabase.from("group_members").select("user_id, role, profiles(id, display_name, avatar)").eq("group_id", id),
       supabase.from("ehsaan_entries").select("*").eq("group_id", id).order("created_at", { ascending: false }),
     ]);
+    // No row: the group was deleted (possibly by an admin while this page was open) or I was removed.
+    if (g.error?.code === "PGRST116") {
+      setGroup(null);
+      return setError("gone");
+    }
     const err = g.error ?? m.error ?? e.error;
     if (err) return setError(err.message);
     setGroup(g.data);
@@ -90,7 +96,19 @@ export default function GroupPage() {
     else load();
   }
 
+  if (error === "gone") {
+    return (
+      <div className="card mt-10 space-y-3 text-center">
+        <p className="text-xl font-bold">This group no longer exists</p>
+        <p className="text-sm text-muted">An admin deleted it, or you&apos;re no longer a member.</p>
+        <Link href="/" className="btn inline-block">
+          Go to my groups
+        </Link>
+      </div>
+    );
+  }
   if (!group) return <p className="mt-10 text-center text-muted">{error ?? "Loading…"}</p>;
+  const isAdmin = members.some((m) => m.user_id === userId && m.role === "admin");
 
   return (
     <div className="space-y-6">
@@ -177,6 +195,7 @@ export default function GroupPage() {
       </section>
 
       <MembersPanel groupId={id} members={members} userId={userId} onChanged={load} onError={setError} />
+      {isAdmin && <DeleteGroup groupId={id} groupName={group.name} />}
     </div>
   );
 }
