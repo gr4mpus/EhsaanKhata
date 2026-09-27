@@ -16,14 +16,17 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: "#ffd23f",
+  // Always light, even when the phone or browser is in dark mode (also opts out of Chrome's auto-darkening).
+  colorScheme: "only light",
   width: "device-width",
   initialScale: 1,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${spaceGrotesk.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">
+    <html lang="en" className={`${spaceGrotesk.variable} antialiased`}>
+      {/* min-h-dvh follows the phone's visible height as the address bar shows/hides, so short pages don't scroll. */}
+      <body className="flex min-h-dvh flex-col">
         <main className="mx-auto w-full max-w-xl flex-1 px-4 py-8">{children}</main>
         <footer className="mx-auto w-full max-w-xl px-4 pb-8 text-center text-sm text-muted">
           Made with 💛 by{" "}

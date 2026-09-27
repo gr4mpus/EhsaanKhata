@@ -2,6 +2,7 @@
 
 /* Clean brutalism: flat colours, thick ink borders, hard offset shadows, no blur or gradients. */
 :root {
+  color-scheme: only light;
   --background: #fbf6ea;
   --foreground: #111111;
   --surface: #ffffff;
@@ -17,23 +18,6 @@
   --on-accent: #111111;
   --shadow: 4px 4px 0 var(--ink);
   --shadow-sm: 2px 2px 0 var(--ink);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #141414;
-    --foreground: #f4f1ea;
-    --surface: #1f1f1f;
-    --ink: #f4f1ea;
-    --muted: #a9a59c;
-    --accent: #ffd23f;
-    --accent-soft: #3a3214;
-    --pink: #ff8fab;
-    --ok: #111111;
-    --ok-soft: #7ee2a8;
-    --bad: #111111;
-    --bad-soft: #ff8a80;
-  }
 }
 
 @theme inline {
