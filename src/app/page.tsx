@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
@@ -17,6 +17,9 @@ export default function HomePage() {
   const [groups, setGroups] = useState<GroupRow[] | null>(null);
   const [newName, setNewName] = useState("");
   const [code, setCode] = useState("");
+  const [creating, setCreating] = useState(false);
+  // A ref, not just state: a fast double tap can fire twice before React re-renders the disabled button.
+  const createInFlight = useRef(false);
   const [error, setError] = useState<string | null>(null);
   const [me, setMe] = useState<Profile | null>(null);
   const [myRequests, setMyRequests] = useState<MyJoinRequest[]>([]);
@@ -53,8 +56,16 @@ export default function HomePage() {
 
   async function createGroup(e: React.FormEvent) {
     e.preventDefault();
+    if (createInFlight.current) return;
+    createInFlight.current = true;
+    setCreating(true);
     const { data, error } = await supabase.rpc("create_group", { group_name: newName });
-    if (error) return setError(error.message);
+    if (error) {
+      createInFlight.current = false;
+      setCreating(false);
+      return setError(error.message);
+    }
+    // Stay disabled until the page changes, so nothing can be submitted again meanwhile.
     router.push(`/groups/${data}`);
   }
 
@@ -121,7 +132,9 @@ export default function HomePage() {
         <h2 className="text-lg font-semibold">Create a group</h2>
         <div className="flex gap-2">
           <input className="input" placeholder="Group name" value={newName} onChange={(e) => setNewName(e.target.value)} required />
-          <button className="btn">Create</button>
+          <button className="btn" disabled={creating}>
+            {creating ? "Creating…" : "Create"}
+          </button>
         </div>
       </form>
 
